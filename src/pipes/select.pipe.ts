@@ -3,32 +3,23 @@ import {
   PipeTransform,
   ChangeDetectorRef,
   OnDestroy,
-  Compiler,
 } from '@angular/core';
-import { Parser, Lexer, IvyParser } from '@angular/compiler';
-import { Store, select } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
 
-import { constructPathFrom } from '../select.utils';
+import { parsePropertyPath } from '../select.utils';
+import { SubscriptionBase } from '../subscription-base';
 
 @Pipe({
   name: 'select',
   pure: false,
 })
-export class SelectPipe implements OnDestroy, PipeTransform {
+export class SelectPipe extends SubscriptionBase
+  implements OnDestroy, PipeTransform {
   private path: string;
   private selector: (store: any) => any;
-  private subscription: Subscription;
-  private currentValue: any;
 
-  private parser: Parser;
-
-  constructor(
-    private store: Store<any>,
-    private changeDetector: ChangeDetectorRef,
-    private compiler: Compiler
-  ) {
-    this.parser = new IvyParser(new Lexer());
+  constructor(store: Store<any>, private changeDetector: ChangeDetectorRef) {
+    super(store);
   }
 
   transform(path: string): any {
@@ -36,44 +27,28 @@ export class SelectPipe implements OnDestroy, PipeTransform {
       this.unsubscribe();
 
       this.path = path;
-      const { ast } = this.parser.parseBinding(this.path, null, 0);
-
-      const pathFn = constructPathFrom(ast);
+      const pathFn = parsePropertyPath(path);
       this.selector = (store) => pathFn(store, store);
       this.subscribe();
     }
 
-    return this.currentValue;
+    return this.getCurrentValue();
   }
 
-  ngOnDestroy(): void {
-    this.unsubscribe();
+  protected getSelector() {
+    return this.selector;
   }
 
-  private subscribe() {
+  protected setCurrentValue(value: any) {
+    super.setCurrentValue(value);
+    this.changeDetector.markForCheck();
+  }
+
+  protected subscribe() {
     if (!this.path) {
       return;
     }
 
-    this.currentValue = this.store.select(this.path);
-
-    this.store.pipe(select(this.selector)).subscribe((value: any) => {
-      if (this.currentValue === value) {
-        return;
-      }
-
-      console.log('VALUE:', this.path, value);
-      this.currentValue = value;
-      this.changeDetector.markForCheck();
-    });
-  }
-
-  private unsubscribe() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-
-    this.currentValue = undefined;
-    this.subscription = null;
+    super.subscribe();
   }
 }

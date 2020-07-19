@@ -7,9 +7,19 @@ import {
   MethodCall,
   LiteralArray,
   FunctionCall,
+  Lexer,
+  IvyParser,
 } from '@angular/compiler';
 
 export type PathFn = (context: any, base: any) => any;
+
+const parser = new IvyParser(new Lexer());
+
+export const parsePropertyPath = (path: string) => {
+  const { ast } = parser.parseBinding(path, null, 0);
+
+  return constructPathFrom(ast);
+};
 
 const basePathFn = (target: any) => target;
 
@@ -49,10 +59,10 @@ export const constructPathFrom = (
 };
 
 const constructPathFromNamed = (
-  target: PropertyRead,
+  ast: PropertyRead,
   nextFn: PathFn = basePathFn
 ) => {
-  const { name, receiver } = target;
+  const { name, receiver } = ast;
   const fn = (context: any, base: any) => nextFn(context[name], base);
 
   if (receiver) {
