@@ -1,0 +1,36 @@
+{
+  "name": "@actualwave/ngrx-bindings",
+  "version": "0.0.1",
+  "description": "NGRX bindings for UI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/burdiuz/js-ngrx-bindings.git"
+  },
+  "keywords": [
+    "angular",
+    "ngrx",
+    "select",
+    "template",
+    "store",
+    "state"
+  ],
+  "author": "Oleg Galaburda <burdiuz@gmail.com> (http://actualwave.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/burdiuz/js-ngrx-bindings/issues"
+  },
+  "homepage": "https://github.com/burdiuz/js-ngrx-bindings#readme",
+  "peerDependencies": {
+    "@angular/common": "^10.0.0",
+    "@angular/compiler": "^10.0.0",
+    "@angular/core": "^10.0.0",
+    "@ngrx/store": "^9.2.0",
+    "rxjs": "^6.5.4",
+    "tslib": "^1.13.0"
+  },
+  "dependencies": {}
+}
