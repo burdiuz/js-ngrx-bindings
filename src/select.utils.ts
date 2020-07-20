@@ -17,8 +17,9 @@ const parser = new IvyParser(new Lexer());
 
 export const parsePropertyPath = (path: string) => {
   const { ast } = parser.parseBinding(path, null, 0);
+  const pathFn = constructPathFrom(ast);
 
-  return constructPathFrom(ast);
+  return (store: any) => pathFn(store, store);
 };
 
 const basePathFn = (target: any) => target;

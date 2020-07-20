@@ -27,8 +27,7 @@ export class SelectPipe extends SubscriptionBase
       this.unsubscribe();
 
       this.path = path;
-      const pathFn = parsePropertyPath(path);
-      this.selector = (store) => pathFn(store, store);
+      this.selector = parsePropertyPath(path);
       this.subscribe();
     }
 

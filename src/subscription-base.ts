@@ -6,7 +6,7 @@ export abstract class SubscriptionBase implements OnDestroy {
   protected subscription: Subscription;
   private currentValue: any;
 
-  constructor(private store: Store<any>) {}
+  constructor(protected store: Store<any>) {}
 
   ngOnDestroy(): void {
     this.unsubscribe();
@@ -22,20 +22,20 @@ export abstract class SubscriptionBase implements OnDestroy {
     this.currentValue = value;
   }
 
+  protected getObservable() {
+    return this.store.pipe(select(this.getSelector()));
+  }
+
   protected subscribe() {
     this.unsubscribe();
 
-    this.setCurrentValue(this.store.select(this.getSelector()));
+    this.subscription = this.getObservable().subscribe((value: any) => {
+      if (this.getCurrentValue() === value) {
+        return;
+      }
 
-    this.subscription = this.store
-      .pipe(select(this.getSelector()))
-      .subscribe((value: any) => {
-        if (this.getCurrentValue() === value) {
-          return;
-        }
-
-        this.setCurrentValue(value);
-      });
+      this.setCurrentValue(value);
+    });
   }
 
   protected unsubscribe() {
