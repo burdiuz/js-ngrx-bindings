@@ -39,12 +39,12 @@ export const createSelectorDirective = (
   targetElement = '',
   targetProp = 'innerText',
   targetAttr = ''
-) =>
-  Directive({
+) => {
+  const Definition: any = Directive({
     selector: directiveSelector,
   })(
     class extends SelectNoInputDirective {
-      static ctorParameters = () => [{ type: Store }, { type: ElementRef }];
+      // static ctorParameters = () => [{ type: Store }, { type: ElementRef }];
 
       constructor(store: Store<any>, el: ElementRef) {
         super(store, el);
@@ -61,6 +61,12 @@ export const createSelectorDirective = (
       }
     }
   );
+
+  Inject(Store)(Definition, undefined, 0);
+  Inject(ElementRef)(Definition, undefined, 1);
+
+  return Definition;
+};
 
 export const createSelectorDirectives = (
   selectors: { [key: string]: (store: any) => any },

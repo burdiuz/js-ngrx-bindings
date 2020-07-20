@@ -1,4 +1,10 @@
-import { Directive, ElementRef, Inject, Input } from '@angular/core';
+import {
+  Directive,
+  makeDecorator,
+  ElementRef,
+  Inject,
+  Input,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { SELECTORS_MAP_PROVIDER } from '../selectors.module';
@@ -40,12 +46,12 @@ export const createSelectorOnceDirective = (
   targetElement = '',
   targetProp = 'innerText',
   targetAttr = ''
-) =>
-  Directive({
+) => {
+  const Definition: any = Directive({
     selector: directiveSelector,
   })(
     class extends SelectNoInputDirective {
-      static ctorParameters = () => [{ type: Store }, { type: ElementRef }];
+      // static ctorParameters = () => [{ type: Store }, { type: ElementRef }];
 
       constructor(store: Store<any>, el: ElementRef) {
         super(store, el);
@@ -62,6 +68,12 @@ export const createSelectorOnceDirective = (
       }
     }
   );
+
+  Inject(Store)(Definition, undefined, 0);
+  Inject(ElementRef)(Definition, undefined, 1);
+
+  return Definition;
+};
 
 export const createSelectorOnceDirectives = (
   selectors: { [key: string]: (store: any) => any },
