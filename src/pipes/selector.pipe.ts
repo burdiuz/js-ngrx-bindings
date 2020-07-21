@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform, Inject, ChangeDetectorRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 
+import { getSelectorFrom } from '../selector.utils';
 import { SELECTORS_MAP_PROVIDER } from '../selectors.module';
 import { SubscriptionBase } from '../subscription-base';
 
@@ -9,7 +10,7 @@ import { SubscriptionBase } from '../subscription-base';
   pure: false,
 })
 export class SelectorPipe extends SubscriptionBase implements PipeTransform {
-  private selectorKey: string;
+  private selectorKey: any;
   private selector: () => any;
 
   constructor(
@@ -44,9 +45,7 @@ export class SelectorPipe extends SubscriptionBase implements PipeTransform {
       return;
     }
 
-    const { [this.selectorKey]: selector } = this.selectors;
-
-    this.selector = selector;
+    this.selector = getSelectorFrom(this.selectorKey, this.selectors);
     super.subscribe();
   }
 }

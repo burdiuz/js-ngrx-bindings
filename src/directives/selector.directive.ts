@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { SELECTORS_MAP_PROVIDER } from '../selectors.module';
 import { Observable } from 'rxjs';
 
+import { getSelectorFrom } from '../selector.utils';
 import {
   SelectBaseDirective,
   SelectNoInputDirective,
@@ -25,7 +26,7 @@ export class SelectorDirective extends SelectBaseDirective {
   }
 
   protected setSelector() {
-    this.selectorFn = this.selectors[this.value];
+    this.selectorFn = getSelectorFrom(this.value, this.selectors);
   }
 
   protected configureObservable(source: Observable): Observable {
@@ -59,6 +60,8 @@ export const createSelectorDirective = (
       protected configureObservable(source: Observable): Observable {
         return source;
       }
+
+      ngOnChanges() {}
     }
   );
 

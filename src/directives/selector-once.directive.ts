@@ -1,16 +1,11 @@
-import {
-  Directive,
-  makeDecorator,
-  ElementRef,
-  Inject,
-  Input,
-} from '@angular/core';
+import { Directive, ElementRef, Inject, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { SELECTORS_MAP_PROVIDER } from '../selectors.module';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
+import { getSelectorFrom } from '../selector.utils';
 import {
   SelectBaseDirective,
   SelectNoInputDirective,
@@ -32,7 +27,7 @@ export class SelectorOnceDirective extends SelectBaseDirective {
   }
 
   protected setSelector() {
-    this.selectorFn = this.selectors[this.value];
+    this.selectorFn = getSelectorFrom(this.value, this.selectors);
   }
 
   protected configureObservable(source: Observable): Observable {
@@ -51,8 +46,6 @@ export const createSelectorOnceDirective = (
     selector: directiveSelector,
   })(
     class extends SelectNoInputDirective {
-      // static ctorParameters = () => [{ type: Store }, { type: ElementRef }];
-
       constructor(store: Store<any>, el: ElementRef) {
         super(store, el);
         this.selectorFn = selectorFn;
@@ -66,6 +59,8 @@ export const createSelectorOnceDirective = (
       protected configureObservable(source: Observable): Observable {
         return source.pipe(take(1));
       }
+
+      ngOnChanges() {}
     }
   );
 
