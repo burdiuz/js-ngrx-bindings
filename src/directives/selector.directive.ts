@@ -29,7 +29,7 @@ export class SelectorDirective extends SelectBaseDirective {
     this.selectorFn = getSelectorFrom(this.value, this.selectors);
   }
 
-  protected configureObservable(source: Observable): Observable {
+  protected configureObservable(source: Observable<any>): Observable<any> {
     return source;
   }
 }
@@ -57,7 +57,7 @@ export const createSelectorDirective = (
 
       protected setSelector() {}
 
-      protected configureObservable(source: Observable): Observable {
+      protected configureObservable(source: Observable<any>): Observable<any> {
         return source;
       }
 

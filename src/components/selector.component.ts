@@ -26,7 +26,7 @@ export class SelectorComponent extends SelectBaseComponent {
     this.selectorFn = getSelectorFrom(this.value, this.selectors);
   }
 
-  protected configureObservable(source: Observable): Observable {
+  protected configureObservable(source: Observable<any>): Observable<any> {
     return source;
   }
 }
@@ -48,7 +48,7 @@ export const createSelectorComponent = (
 
       protected setSelector() {}
 
-      protected configureObservable(source: Observable): Observable {
+      protected configureObservable(source: Observable<any>): Observable<any> {
         return source;
       }
 

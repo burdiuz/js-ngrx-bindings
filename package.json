@@ -2,8 +2,10 @@
   "name": "@actualwave/ngrx-bindings",
   "version": "0.0.1",
   "description": "NGRX bindings for UI",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/main.d.ts",
   "scripts": {
+    "build": "rollup -c rollup.config.js && tsc -d --emitDeclarationOnly --declarationDir dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -30,7 +32,17 @@
     "@angular/core": "^10.0.0",
     "@ngrx/store": "^9.2.0",
     "rxjs": "^6.5.4",
-    "tslib": "^1.13.0"
+    "tslib": "^2.0.0"
   },
-  "dependencies": {}
+  "devDependencies": {
+    "@angular/common": "^10.0.0",
+    "@angular/compiler": "^10.0.0",
+    "@angular/core": "^10.0.0",
+    "@ngrx/store": "^9.2.0",
+    "@rollup/plugin-typescript": "^5.0.2",
+    "rollup": "^2.22.1",
+    "rxjs": "^6.5.4",
+    "tslib": "^2.0.0",
+    "typescript": "^3.9.7"
+  }
 }

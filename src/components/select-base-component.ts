@@ -9,7 +9,7 @@ export abstract class SelectBaseComponent extends SubscriptionBase
 
   output: any;
 
-  protected abstract configureObservable(source: Observable): Observable;
+  protected abstract configureObservable(source: Observable<any>): Observable<any>;
 
   protected abstract setSelector(): void;
 

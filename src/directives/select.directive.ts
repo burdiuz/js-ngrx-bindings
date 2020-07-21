@@ -21,7 +21,7 @@ export class SelectDirective extends SelectBaseDirective {
     this.selectorFn = parsePropertyPath(this.value);
   }
 
-  protected configureObservable(source: Observable): Observable {
+  protected configureObservable(source: Observable<any>): Observable<any> {
     return source;
   }
 }

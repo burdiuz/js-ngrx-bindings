@@ -21,7 +21,7 @@ export abstract class SelectNoInputDirective extends SubscriptionBase
     super(store);
   }
 
-  protected abstract configureObservable(source: Observable): Observable;
+  protected abstract configureObservable(source: Observable<any>): Observable<any>;
 
   protected abstract setSelector(): void;
 

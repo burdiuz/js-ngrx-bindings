@@ -22,7 +22,7 @@ export class SelectOnceDirective extends SelectBaseDirective {
     this.selectorFn = parsePropertyPath(this.value);
   }
 
-  protected configureObservable(source: Observable): Observable {
+  protected configureObservable(source: Observable<any>): Observable<any> {
     return source.pipe(take(1));
   }
 }

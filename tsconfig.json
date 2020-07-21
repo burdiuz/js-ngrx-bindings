@@ -2,7 +2,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
@@ -20,8 +19,5 @@
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true
   },
-  "exclude": [
-    "src/test.ts",
-    "**/*.spec.ts"
-  ]
+  "exclude": ["node_modules", "dist", "test.ts", "**/*.spec.ts"]
 }
