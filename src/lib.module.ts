@@ -28,5 +28,19 @@ import { SelectorOnceComponent } from './components/selector-once.component';
   ],
   imports: [],
   providers: [],
+  exports: [
+    SelectPipe,
+    SelectorPipe,
+
+    SelectComponent,
+    SelectOnceComponent,
+    SelectorComponent,
+    SelectorOnceComponent,
+
+    SelectDirective,
+    SelectOnceDirective,
+    SelectorDirective,
+    SelectorOnceDirective,
+  ],
 })
 export class NGRXBindingsModule {}
