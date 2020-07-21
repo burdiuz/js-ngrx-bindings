@@ -1,12 +1,16 @@
 {
   "name": "@actualwave/ngrx-bindings",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "NGRX bindings for UI",
-  "main": "./dist/index.js",
-  "types": "./dist/main.d.ts",
   "scripts": {
-    "build": "rollup -c rollup.config.js && tsc -d --emitDeclarationOnly --declarationDir dist",
+    "build": "ng-packagr -p package.json",
+    "publish": "npm run build && cd ./dist && npm publish --access=public",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "ngPackage": {
+    "lib": {
+      "entryFile": "src/index.ts"
+    }
   },
   "repository": {
     "type": "git",
@@ -26,23 +30,24 @@
     "url": "https://github.com/burdiuz/js-ngrx-bindings/issues"
   },
   "homepage": "https://github.com/burdiuz/js-ngrx-bindings#readme",
+  "dependencies": {
+    "tslib": "^2.0.0"
+  },
   "peerDependencies": {
     "@angular/common": "^10.0.0",
     "@angular/compiler": "^10.0.0",
     "@angular/core": "^10.0.0",
     "@ngrx/store": "^9.2.0",
-    "rxjs": "^6.5.4",
-    "tslib": "^2.0.0"
+    "rxjs": "^6.5.4"
   },
   "devDependencies": {
     "@angular/common": "^10.0.0",
     "@angular/compiler": "^10.0.0",
+    "@angular/compiler-cli": "^10.0.4",
     "@angular/core": "^10.0.0",
     "@ngrx/store": "^9.2.0",
-    "@rollup/plugin-typescript": "^5.0.2",
-    "rollup": "^2.22.1",
+    "ng-packagr": "^10.0.2",
     "rxjs": "^6.5.4",
-    "tslib": "^2.0.0",
     "typescript": "^3.9.7"
   }
 }

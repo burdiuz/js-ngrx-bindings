@@ -5,7 +5,7 @@ export const SELECTORS_MAP_PROVIDER = new InjectionToken(
 );
 
 @NgModule({})
-class SelectorsMapModule {}
+export class SelectorsMapModule {}
 
 export class SelectorsModule {
   static forSelectors(selectors: {
