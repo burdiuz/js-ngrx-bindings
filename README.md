@@ -2,8 +2,9 @@
 
 This library aims to help developer to use NGRX from templates skipping boilerplate code in components.
 
-> Note: This library allows using object paths to property in the store to select the value and dispatching action by specifying its type string. This can be useful while developing, but I strongly recommend to refrain from using them after and replace with selectors and action creators as soon as possible.
+> Note: This library allows using object paths to property in the store to select the value and dispatch action by specifying its type string. This can be useful while developing, but I strongly recommend to refrain from using them after and replace with selectors and action creators as soon as possible.
 
+Here is a [classic](https://codesandbox.io/s/qvy8xvlxzj) example with counter [updated to use NGRX Bindings on codesandbox.io](https://codesandbox.io/s/ngrx-bindings-introduction-with-counter-8tm5e).
 
 # Select data from the Store
 This library provides multiple ways of selecting data from the Store, using pipes, directives and components. There are two types of each -- one to use NGRX selector and another to use JS path to the property.

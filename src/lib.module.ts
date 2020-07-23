@@ -35,9 +35,12 @@ import { SelectorOnceComponent } from './components/selector-once.component';
   imports: [],
   providers: [],
   exports: [
+    DispatchPipe,
     SelectPipe,
     SelectorPipe,
 
+    ActionComponent,
+    ChannelComponent,
     SelectComponent,
     SelectOnceComponent,
     SelectorComponent,

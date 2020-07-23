@@ -8,15 +8,21 @@ import {
   LiteralArray,
   FunctionCall,
   Lexer,
-  IvyParser,
 } from '@angular/compiler';
+import * as compiler from '@angular/compiler';
 
 export type PathFn = (context: any, base: any) => any;
 
-const parser = new IvyParser(new Lexer());
+const ParserConstructor = compiler.IvyParser || compiler.Parser;
+
+const parser = new ParserConstructor(new Lexer());
 
 export const parsePropertyPath = (path: string) => {
-  const { ast } = parser.parseBinding(path, null, 0);
+  /*
+    FIXME any number given to offset throws error in older versions of Angular. 
+    Because previously third argument was interpolation config and not a number.
+  */
+  const { ast } = parser.parseBinding(path, undefined, undefined);
   const pathFn = constructPathFrom(ast);
 
   return (store: any) => pathFn(store, store);
