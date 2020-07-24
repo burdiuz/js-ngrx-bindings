@@ -13,7 +13,14 @@ export class DispatchPipe implements PipeTransform {
     @Inject(ACTIONS_MAP_PROVIDER) private actions: any
   ) {}
 
-  transform(payload: any, action?: string | Action | ActionCreator): any {
-    return this.store.dispatch(createActionFrom(action, payload));
+  transform(payload: any, actionSource?: string | Action | ActionCreator): any {
+    let action = actionSource;
+
+    if(typeof action === 'string') {
+      action = this.actions[action];
+    }
+
+    this.store.dispatch(createActionFrom(action, payload));
+    return payload;
   }
 }

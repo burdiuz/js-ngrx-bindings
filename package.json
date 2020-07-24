@@ -1,6 +1,6 @@
 {
   "name": "@actualwave/ngrx-bindings",
-  "version": "0.0.9",
+  "version": "0.0.15",
   "description": "NGRX bindings for UI",
   "scripts": {
     "build": "ng-packagr -p package.json",

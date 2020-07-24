@@ -2,6 +2,7 @@ export * from './lib.module';
 export { ActionsModule, ACTIONS_MAP_PROVIDER } from './actions.module';
 export { SelectorsModule, SELECTORS_MAP_PROVIDER } from './selectors.module';
 
+export * from './pipes/action.pipe';
 export * from './pipes/dispatch.pipe';
 export * from './pipes/select.pipe';
 export * from './pipes/selector.pipe';

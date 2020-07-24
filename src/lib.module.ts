@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 
+import { ActionPipe } from './pipes/action.pipe';
 import { DispatchPipe } from './pipes/dispatch.pipe';
 import { SelectPipe } from './pipes/select.pipe';
 import { SelectorPipe } from './pipes/selector.pipe';
@@ -14,42 +15,29 @@ import { SelectOnceComponent } from './components/select-once.component';
 import { SelectorComponent } from './components/selector.component';
 import { SelectorOnceComponent } from './components/selector-once.component';
 
+const LIST = [
+  ActionPipe,
+  DispatchPipe,
+  SelectPipe,
+  SelectorPipe,
+
+  ActionComponent,
+  ChannelComponent,
+  SelectComponent,
+  SelectOnceComponent,
+  SelectorComponent,
+  SelectorOnceComponent,
+
+  SelectDirective,
+  SelectOnceDirective,
+  SelectorDirective,
+  SelectorOnceDirective,
+];
+
 @NgModule({
-  declarations: [
-    DispatchPipe,
-    SelectPipe,
-    SelectorPipe,
-
-    ActionComponent,
-    ChannelComponent,
-    SelectComponent,
-    SelectOnceComponent,
-    SelectorComponent,
-    SelectorOnceComponent,
-
-    SelectDirective,
-    SelectOnceDirective,
-    SelectorDirective,
-    SelectorOnceDirective,
-  ],
+  declarations: LIST,
   imports: [],
   providers: [],
-  exports: [
-    DispatchPipe,
-    SelectPipe,
-    SelectorPipe,
-
-    ActionComponent,
-    ChannelComponent,
-    SelectComponent,
-    SelectOnceComponent,
-    SelectorComponent,
-    SelectorOnceComponent,
-
-    SelectDirective,
-    SelectOnceDirective,
-    SelectorDirective,
-    SelectorOnceDirective,
-  ],
+  exports: LIST,
 })
 export class NGRXBindingsModule {}

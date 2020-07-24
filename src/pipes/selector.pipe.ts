@@ -21,7 +21,7 @@ export class SelectorPipe extends SubscriptionBase implements PipeTransform {
     super(store);
   }
 
-  transform(selectorKey: string, ...args: any[]): string {
+  transform(selectorKey: string): string {
     if (selectorKey !== this.selectorKey) {
       this.unsubscribe();
       this.selectorKey = selectorKey;

@@ -1,5 +1,7 @@
 import { Action, ActionCreator } from '@ngrx/store';
 
+export type NGRXAction = string | Action | ActionCreator;
+
 export const createActionFrom = (
   action: string | Action | ActionCreator,
   payload: any
