@@ -18,11 +18,15 @@ export const createDataHubComponent = (
       }
 
       ngOnInit() {
-        this.subscriptions = Object.keys(selectors).map((key) =>
-          this.store.pipe(select(selectors[key])).subscribe((value) => {
+        this.subscriptions = Object.keys(selectors).map((key) => {
+          const subj = this.store.pipe(select(selectors[key]));
+
+          this[`${key}$`] = subj;
+
+          return subj.subscribe((value) => {
             this[key] = value;
-          })
-        );
+          });
+        });
       }
     }
   );

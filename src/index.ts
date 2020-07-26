@@ -14,6 +14,8 @@ export * from './directives/selector-once.directive';
 
 export * from './components/action.component';
 export * from './components/channel.component';
+export * from './components/data-hub.component';
+export * from './components/event-hub.component';
 export * from './components/select.component';
 export * from './components/select-once.component';
 export * from './components/selector.component';

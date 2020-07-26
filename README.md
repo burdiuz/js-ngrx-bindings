@@ -103,7 +103,12 @@ declarations: [
 ],
 imports: [
   ActionsModule.forActions({
-    "dispatchMyAction": "My Action Type",
+    "dispatchSave": "Save Action Type",
+    "dispatchChangeTitle": { type: "Change Action Type", meta: "title" },
+    "dispatchReset": (newValue:any = null) => ({
+      type: "Reet Action Type", 
+      payload: { value: newValue },
+    }),
   }),
 
 ```
@@ -111,14 +116,19 @@ Use channel component in your HTML
 ```html
 <rx-channel #channel></rx-channel>
 ...
-  <input type="text" (change)="channel.dispatchMyAction($event.target.value)">
+  <input type="text" (change)="channel.dispatchChangeTitle($event.target.value)">
 ```
 No need to inject store and write methods within every component for such simple action dispatch. Channel component can be used with imported actions in every component within the module where actions are imported.
-
+Channel actions can be chained
+```html
+<rx-channel #channel></rx-channel>
+...
+  <button (change)="channel.dispatchChangeTitle('').dispatchReset()">Clear and Reset</button>
+```
 
 > Note: This library allows using object paths to property in the store to select the value and dispatch action by specifying its type string. This can be useful while developing, but I strongly recommend to refrain from using them after and replace with selectors and action creators as soon as possible.
 
-Here is a [classic](https://codesandbox.io/s/qvy8xvlxzj) example with counter [updated to use NGRX Bindings on codesandbox.io](https://codesandbox.io/s/ngrx-bindings-introduction-with-counter-8tm5e).
+Here is a [classic](https://codesandbox.io/s/qvy8xvlxzj) example with counter [updated to use NGRX Bindings on codesandbox.io](https://codesandbox.io/s/ngrx-bindings-introduction-with-counter-8tm5e). Also I've found random "in-development" project and changed it to use this library, you can [check it here](https://codesandbox.io/s/angular-ngrx-bindings-1lhsb).
 
 
 

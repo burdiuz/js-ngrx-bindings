@@ -27,12 +27,13 @@ export const createEventHubComponent = (
 
       ngOnInit() {
         this.subscriptions = Object.keys(selectors).map((key) => {
+          const subj = this.store.pipe(select(selectors[key]));
           const emitter = new EventEmitter();
-          this[key] = emitter;
 
-          return this.store
-            .pipe(select(selectors[key]))
-            .subscribe((value) => emitter.emit(value));
+          this[key] = emitter;
+          this[`${key}$`] = subj;
+
+          return subj.subscribe((value) => emitter.emit(value));
         });
       }
     }
