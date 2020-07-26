@@ -43,7 +43,7 @@ export const createChannelComponent = (
     selector: componentSelector,
     template,
   })(
-    class {
+    class CustomChannelComponent {
       constructor(private store: Store<any>) {
         generateActionMethods(actions, this);
       }

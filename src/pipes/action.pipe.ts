@@ -20,7 +20,7 @@ export const createActionPipe = (pipeName: string, action: NGRXAction) => {
   const Definition: any = Pipe({
     name: pipeName,
   })(
-    class {
+    class CustomActionPipe {
       constructor(private store: Store<any>) {}
 
       transform(payload: any): any {

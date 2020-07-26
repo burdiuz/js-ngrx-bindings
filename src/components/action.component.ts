@@ -27,7 +27,7 @@ export const createActionComponent = (
     selector: componentSelector,
     template,
   })(
-    class {
+    class CustomActionComponent {
       constructor(private store: Store<any>) {}
 
       dispatch(payload: any) {

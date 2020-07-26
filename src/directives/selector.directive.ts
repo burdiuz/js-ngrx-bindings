@@ -44,7 +44,7 @@ export const createSelectorDirective = (
   const Definition: any = Directive({
     selector: directiveSelector,
   })(
-    class extends SelectNoInputDirective {
+    class CustomSelectorDirective extends SelectNoInputDirective {
       // static ctorParameters = () => [{ type: Store }, { type: ElementRef }];
 
       constructor(store: Store<any>, el: ElementRef) {

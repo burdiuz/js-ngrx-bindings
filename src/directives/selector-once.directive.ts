@@ -45,7 +45,7 @@ export const createSelectorOnceDirective = (
   const Definition: any = Directive({
     selector: directiveSelector,
   })(
-    class extends SelectNoInputDirective {
+    class CustomSelectorOnceDirective extends SelectNoInputDirective {
       constructor(store: Store<any>, el: ElementRef) {
         super(store, el);
         this.selectorFn = selectorFn;

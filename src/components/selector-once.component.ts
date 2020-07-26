@@ -41,7 +41,7 @@ export const createSelectorOnceComponent = (
     selector: componentSelector,
     template,
   })(
-    class extends SelectBaseComponent {
+    class CustomSelectorOnceComponent extends SelectBaseComponent {
       constructor(store: Store<any>) {
         super(store);
         this.selectorFn = selectorFn;

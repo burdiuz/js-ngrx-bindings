@@ -1,6 +1,11 @@
 # @actualwave/ngrx-bindings
 This library aims to help developer to use NGRX from templates skipping boilerplate code in components.
 
+## Installation
+```
+npm install @actualwave/ngrx-bindings
+```
+
 ## Introduction
 Normally, to request data from the store in a component, you inject the store into component
 ```javascript
