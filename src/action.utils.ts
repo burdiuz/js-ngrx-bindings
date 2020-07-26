@@ -1,4 +1,6 @@
-import { Action, ActionCreator } from '@ngrx/store';
+import { Action } from '@ngrx/store';
+
+type ActionCreator = (payload: any) => Action & { payload: any };
 
 export type NGRXAction = string | Action | ActionCreator;
 

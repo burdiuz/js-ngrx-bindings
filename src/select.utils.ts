@@ -8,6 +8,7 @@ import {
   LiteralArray,
   FunctionCall,
   Lexer,
+  EmptyExpr,
 } from '@angular/compiler';
 import * as compiler from '@angular/compiler';
 
@@ -19,7 +20,7 @@ const parser = new ParserConstructor(new Lexer());
 
 export const parsePropertyPath = (path: string) => {
   /*
-    FIXME any number given to offset throws error in older versions of Angular. 
+    FIXME any number given to offset throws error in older versions of Angular.
     Because previously third argument was interpolation config and not a number.
   */
   const { ast } = parser.parseBinding(path, undefined, undefined);
@@ -57,6 +58,7 @@ export const constructPathFrom = (
       const { expressions } = target as LiteralArray;
 
       return createListFn(expressions);
+    case EmptyExpr:
     case ImplicitReceiver:
       return nextFn;
     default:
