@@ -73,13 +73,14 @@ To do the same with this library, we will create custom directives
   ],
     ...
 ```
-Use directives in HTML
+And use directives in HTML
 ```html
 <header selectHeader></header>
 <title selectTitle></title>
 ```
 
-In a most common case, to dispatch an action you have do inject store and define a component method like
+
+In a most common case(subjective), to dispatch an action you have do inject store and define a component method like
 ```javascript
 dispatchMyAction(event: Event) {
   this.store.dispatch(createMyAction(event.target.value));
@@ -89,7 +90,7 @@ Then use it in HTML
 ```html
 <input type="text" (change)="dispatchMyAction($event)">
 ```
-This library let's you avoid useless? store injection in such cases by providing an event channel. Import actions in your module
+This library let's you avoid store injection in such cases by providing an event channel. Import actions in your module
 ```javascript
 @NgModule({
 declarations: [
