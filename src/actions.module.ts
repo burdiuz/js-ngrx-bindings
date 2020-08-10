@@ -1,5 +1,7 @@
 import { NgModule, InjectionToken, ModuleWithProviders } from '@angular/core';
-import { Action, ActionCreator } from '@ngrx/store';
+import { Action } from '@ngrx/store';
+
+import { NGRXAction } from './action.utils';
 
 export const ACTIONS_MAP_PROVIDER = new InjectionToken(
   'ngrx-bindings-actions-provider'
@@ -10,7 +12,7 @@ export class ActionsMapModule {}
 
 export class ActionsModule {
   static forActions(actions: {
-    [key: string]: string | Action | ActionCreator;
+    [key: string]: NGRXAction;
   }): ModuleWithProviders<ActionsMapModule> {
     return {
       ngModule: ActionsMapModule,

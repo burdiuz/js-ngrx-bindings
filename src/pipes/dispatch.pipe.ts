@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform, Inject } from '@angular/core';
-import { Store, Action, ActionCreator } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 
-import { createActionFrom } from '../action.utils';
+import { createActionFrom, NGRXAction } from '../action.utils';
 import { ACTIONS_MAP_PROVIDER } from '../actions.module';
 
 @Pipe({
@@ -13,7 +13,7 @@ export class DispatchPipe implements PipeTransform {
     @Inject(ACTIONS_MAP_PROVIDER) private actions: any
   ) {}
 
-  transform(payload: any, actionSource?: string | Action | ActionCreator): any {
+  transform(payload: any, actionSource?: NGRXAction): any {
     let action = actionSource;
 
     if(typeof action === 'string') {

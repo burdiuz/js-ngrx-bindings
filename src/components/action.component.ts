@@ -1,7 +1,7 @@
 import { Component, Input, Inject } from '@angular/core';
-import { Store, Action, ActionCreator } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 
-import { createActionFrom } from '../action.utils';
+import { createActionFrom, NGRXAction } from '../action.utils';
 
 @Component({
   selector: 'rx-action',
@@ -9,7 +9,7 @@ import { createActionFrom } from '../action.utils';
 })
 export class ActionComponent {
   @Input()
-  type: string;
+  type: NGRXAction;
 
   constructor(private store: Store<any>) {}
 
@@ -20,7 +20,7 @@ export class ActionComponent {
 
 export const createActionComponent = (
   componentSelector: string,
-  action: string | Action | ActionCreator,
+  action: NGRXAction,
   template = ''
 ) => {
   const Definition: any = Component({
@@ -43,7 +43,7 @@ export const createActionComponent = (
 
 export const createActionComponents = (
   actions: {
-    [key: string]: string | Action | ActionCreator;
+    [key: string]: NGRXAction;
   },
   template = ''
 ) =>

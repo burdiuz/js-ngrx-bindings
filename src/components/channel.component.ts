@@ -1,8 +1,8 @@
 import { Component, Inject } from '@angular/core';
-import { Store, Action, ActionCreator } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 
 import { ACTIONS_MAP_PROVIDER } from '../actions.module';
-import { createActionFrom } from '../action.utils';
+import { createActionFrom, NGRXAction } from '../action.utils';
 
 const generateActionMethods = (
   actions,
@@ -36,7 +36,7 @@ export class ChannelComponent {
 
 export const createChannelComponent = (
   componentSelector: string,
-  actions: { [actionMethod: string]: string | Action | ActionCreator },
+  actions: { [actionMethod: string]: NGRXAction },
   template = ''
 ) => {
   const Definition: any = Component({
@@ -64,7 +64,7 @@ export const createChannelComponent = (
 export const createChannelComponents = (
   channels: {
     [componentSelector: string]: {
-      [actionMethod: string]: string | Action | ActionCreator;
+      [actionMethod: string]: NGRXAction;
     };
   },
   template = ''

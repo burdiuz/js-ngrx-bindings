@@ -106,7 +106,7 @@ imports: [
     "dispatchSave": "Save Action Type",
     "dispatchChangeTitle": { type: "Change Action Type", meta: "title" },
     "dispatchReset": (newValue:any = null) => ({
-      type: "Reet Action Type", 
+      type: "Reet Action Type",
       payload: { value: newValue },
     }),
   }),
@@ -393,8 +393,354 @@ export class AppModule {}
 Within this module you will be able to use custom components `my-date` and `my-date-once`, directives `myDate` and `myDateOnce` to select data from the Store; and `my-action` with `my-channel` components to dispatch actions.
 
 
-
-
 ## API
+All UI components, directives and pipes are parts of `NGRXBindingsModule`, importing it will automatically make available all of them.
 
-TBA
+### Components
+
+#### Action Component
+Action component allows dispatching any action to the store. To define action type, action object or action creator, just pass it to `type` parameter. It has empty template and will not render anything.
+```html
+<rx-action type="My Custom Action Type"></rx-action>
+<rx-action [type]="{ type: 'My Custom Action Type', meta: myMetaData }"></rx-action>
+<rx-action [type]="createMyCustomAction"></rx-action>
+```
+After adding to component to template, it can be used via template variable
+```html
+<rx-action #action type="My Custom Action Type"></rx-action>
+<button (click)="action.dispatch(myPayloadData)">Dispatch My Action</button>
+```
+Custom Action Components can be created with `createActionComponent()` and `createActionComponents()` factories.
+`createActionComponent()` generates single custom component specifying component selector and action. Action can be anything valid for Action component `type` parameter.
+```typescript
+createActionComponent(
+  componentSelector: string,
+  action: NGRXAction,
+  template?: string
+) => Class;
+```
+`createActionComponents()` generates multiple custom components and requires object as a first argument. Object keys are used as selectors and values as `type` parameter values for generated components.
+```typescript
+createActionComponents(
+  {
+    [key: string]: string | Action | (payload: any) => Action;
+  },
+  template?: string
+) => Class[];
+```
+As optional argument you can pass custom template for `createActionComponent()` and `createActionComponents()`, this, for example, allows creating elements like
+```javascript
+@NgModule({
+  declarations: [
+    createActionComponent(
+      "rx-save-button",
+      "App Save Settings Action Type",
+      '<button (click)="dispatch()"> Save Settings </button>'
+    )
+    ...
+  ],
+  imports: [
+    NGRXBindingsModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}
+```
+When using ActionButton in HTML, it will send `{ type: "App Save Settings Action Type" }` action whenever user clicks the button.
+```html
+<rx-save-button></rx-save-button>
+```
+
+#### Channel Component
+Channel Component works with pre-defined Actions and Action Creators, to start working with it, you have to specify actions you want to use in a channel by importing them
+```javascript
+import { ActionsModule, NGRXBindingsModule } from "@actualwave/ngrx-bindings";
+
+@NgModule({
+  imports: [
+    NGRXBindingsModule,
+    ActionsModule.forActions({
+      "dispatchType": "My Action String Type",
+      "dispatchAction": { type: "My Action Object Type" },
+      "dispatchActionCreator": (payload) => ({ type: "My Action Creator Type", payload }),
+    }),
+  ],
+  declarations: [UsersComponent]
+})
+export class UsersModule {}
+```
+Then add to HTML and use with template variable
+```html
+<rx-channel #actions></rx-channel>
+...
+<input
+  placeholder="Dispatch Action With Payload"
+  (change)="actions.dispatchType($event.target.value)"
+>
+<button
+  (click)="actions.dispatchAction()"
+>
+  Dispatch Action Object
+</button>
+<button
+  (click)="actions.dispatchActionCreator({ value: 112233 }).dispatchAction()"
+>
+  Actions can be chained
+</button>
+```
+Same as Action Component, you can create custom channel components with `createChannelComponent()` and `createChannelComponents()`. To make custom Channel component there are no need to import actions using `ActionsModule.forActions()`, actions are provided when creating custom component
+```javascript
+
+import {
+  SelectorsModule,
+  createChannelComponent,
+  NGRXBindingsModule
+} from "@actualwave/ngrx-bindings";
+
+@NgModule({
+  declarations: [
+    createChannelComponent("rx-product", {
+      "dispatchNameChange": "Product Name Change Action Type",
+    }),
+    ProductsComponent
+  ]
+})
+export class ProductsModule {}
+```
+Then this custom Channel component can be used
+```html
+<rx-product #productActions></rx-product>
+...
+<input
+  placeholder="Product Name"
+  (change)="productActions.dispatchNameChange($event.target.value)"
+>
+```
+
+#### Data Hub Component
+Data Hub Component can be created via `createDataHubComponent()` function.
+```javascript
+import {
+  NGRXBindingsModule,
+  createDataHubComponent
+} from "@actualwave/ngrx-bindings";
+import * as fromProducts from "../state/products.selectors";
+
+@NgModule({
+  declarations: [
+    createDataHubComponent("rx-hub", {
+      list: fromProducts.getAllProducts,
+      product: fromProducts.getCurrentProduct
+    }),
+  ],
+  exports: [ProductsEditComponent]
+})
+export class ProductsEditModule {}
+```
+With value properties `list` and `product` it also provides observables `list$` and `product$` for each selector.
+It accepts a set of selectors and provides values in HTML via template variable.
+```html
+<rx-hub #data></rx-hub>
+<input type="text" [value]="data.product.name"/>
+{{ (data.product$ | async).description }}
+```
+> Currently it does not call `ChangeDetectionRef.markForCheck()` when value changes.
+
+#### Event Hub Component
+Event Hub component works just like Data Hub, but instead of providing values directly, it emits events for every value type.
+```javascript
+import {
+  NGRXBindingsModule,
+  createEventHubComponent
+} from "@actualwave/ngrx-bindings";
+import * as fromProducts from "../state/products.selectors";
+
+@NgModule({
+  declarations: [
+    createEventHubComponent("rx-events", {
+      list: fromProducts.getAllProducts,
+      product: fromProducts.getCurrentProduct
+    }),
+  ],
+  exports: [ProductsEditComponent]
+})
+export class ProductsEditModule {}
+```
+Then in HTML it can be used like this
+```html
+<rx-events
+  (list)="onListUpdate($event)"
+  (product)="onCurrentProductChange($event)"
+></rx-events>
+```
+
+#### Select Component
+Select and Select Once Components show data based on select field path
+```html
+<rx-select value="myFeature.list[0].value"></rx-select>
+<rx-select-once value="myFeature.list[0].value" ></rx-select-once>
+```
+It applies path to NGRX Store state and displayes value as is in the component.
+> Select and Select Once components do not have factory methods to generate custom versions.
+
+#### Selector Component
+Selector and Selector Once Components show data returned from selector. Selectors which can be used with these components must be previously registered with SelectorModule.
+```javascript
+import {
+  SelectorsModule,
+  NGRXBindingsModule
+} from "@actualwave/ngrx-bindings";
+
+@NgModule({
+  imports: [
+    NGRXBindingsModule,
+    SelectorsModule.forSelectors({
+      selectProductList,
+      selectCurrentProduct,
+      selectCurrentProductName,
+      selectCurrentUser,
+      selectCurrentUserName,
+    }),
+  ],
+})
+export class AppModule {}
+```
+And then used in HTML
+```html
+<rx-selector value="selectCurrentProductName"></rx-selector>
+<rx-selector-once value="selectCurrentUserName"></rx-selector-once>
+```
+Just like Select component, it will output value as is.
+
+Selector components provide factory functions `createSelectorComponent()` and `createSelectorComponents()` to generate custom versions.
+```javascript
+import {
+  createSelectorComponent,
+} from "@actualwave/ngrx-bindings";
+
+@NgModule({
+  imports: [
+    CommonModule,
+    createSelectorComponent(
+      'rx-update-date',
+      selectProductLastUpdateDate,
+      '{{ output | date }}',
+    ),
+  ],
+})
+export class AppModule {}
+```
+Created component does not require any customization and can be used anywhere.
+```html
+<rx-update-date></rx-update-date>
+```
+> There are also `createSelectorOnceComponent()` and `createSelectorOnceComponents()` functions to generate custom Selector Only components.
+
+### Directives
+
+#### Select Directive
+Select directive reads property path from its attribute
+```html
+<h2 [select]="products.selected.name"></h2>
+<span [select]="products.selected.description"></span>
+```
+
+#### Selector Directive
+Selector and Selector Once directives require registered NgRx Store selectors to work with.
+```javascript
+import {
+  SelectorsModule,
+  NGRXBindingsModule
+} from "@actualwave/ngrx-bindings";
+
+@NgModule({
+  imports: [
+    NGRXBindingsModule,
+    SelectorsModule.forSelectors({
+      selectProductList,
+      selectCurrentProduct,
+      selectCurrentProductName,
+      selectCurrentUser,
+      selectCurrentUserName,
+    }),
+  ],
+})
+export class AppModule {}
+```
+Once registered, selectors can be used by their names
+```html
+<h2 [selectorOnce]="selectCurrentUser"></h2>
+<span [selector]="selectCurrentProductName"></span>
+```
+
+This library provides multiple functions to generate selector directives. `createSelectorDirective()` and `createSelectorDirectives()` to create custom selector directives for specific slelectors, `createSelectorOnceDirective()` and `createSelectorOnceDirectives()` to create custom selector once directives.
+To create custom directives no need to pre-register NgRx Store selectors, there are specified when generating new custom directive.
+```javascript
+const CurrentUserNameDirective = createSelectorOnceDirective("currentUserName", selectCurrentUserName);
+```
+Such directive can be used with no value
+```html
+<h2 currentUserName></h2>
+```
+
+
+### Pipes
+
+#### Action Pipe
+Action pipe receives a value and dispatches an action with the value as action payload.
+```html
+<span>{{ property | action : "MyActionType" }}</span>
+```
+This will dispatch an action `{ type 'MyActionType' }` every time `property` is changed with value from `property` as payload.
+You can create custom `action` pipes with `createActionPipe()` and `createActionPipes()` functions with passing pipe names and action types(or action objects or action creator functions).
+
+#### Dispatch Pipe
+Dispatch pipe is used just like `action` except it can be used only with actions or action creators registered with `ActionsModule.forActions()`.
+```javascript
+@NgModule({
+declarations: [
+  ChannelComponent,
+],
+imports: [
+  ActionsModule.forActions({
+    "dispatchSave": "Save Action Type",
+    "dispatchChangeTitle": { type: "Change Action Type", meta: "title" },
+    "dispatchReset": (newValue:any = null) => ({
+      type: "Reet Action Type",
+      payload: { value: newValue },
+    }),
+  }),
+```
+For actinos registered like this, `dispatch` pipe can be used by specifying its property name in the object.
+```html
+<span>{{ property | dispatch : "dispatchReset" }}</span>
+```
+
+#### Select Pipe
+Select pipe can be applied to a string representing a property path.
+```html
+<span>{{ "myFeature.list[0].value" | select }}</span>
+```
+
+#### Selector Pipe
+Selector pipe should applied to a previously registered selector name.
+```javascript
+import {
+  SelectorsModule,
+  NGRXBindingsModule
+} from "@actualwave/ngrx-bindings";
+
+@NgModule({
+  imports: [
+    NGRXBindingsModule,
+    SelectorsModule.forSelectors({
+      currentProductName: selectCurrentProductName,
+    }),
+  ],
+})
+export class AppModule {}
+```
+```html
+<span>{{ "currentProductName" | selector }}</span>
+```
